@@ -1,0 +1,1 @@
+{"name":"app","dependencies":{"lodash":"^4.17.15","local":"file:../local","tagged":"latest","scoped":"~1.2"},"devDependencies":{"jest":">=29.0.0 <30"}}

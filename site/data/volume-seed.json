@@ -1,0 +1,65 @@
+{
+  "years": {
+    "2016": {
+      "count": 6449,
+      "complete": true,
+      "through": "2016-12-31",
+      "fetchedAt": "2026-10-22T05:13:57.730Z"
+    },
+    "2017": {
+      "count": 14642,
+      "complete": true,
+      "through": "2017-12-31",
+      "fetchedAt": "2026-10-22T05:14:25.936Z"
+    },
+    "2018": {
+      "count": 16510,
+      "complete": true,
+      "through": "2018-12-31",
+      "fetchedAt": "2026-10-22T05:14:53.685Z"
+    },
+    "2019": {
+      "count": 17305,
+      "complete": true,
+      "through": "2019-12-31",
+      "fetchedAt": "2026-10-22T05:15:31.088Z"
+    },
+    "2020": {
+      "count": 18322,
+      "complete": true,
+      "through": "2020-12-31",
+      "fetchedAt": "2026-10-22T05:16:01.126Z"
+    },
+    "2021": {
+      "count": 20149,
+      "complete": true,
+      "through": "2021-12-31",
+      "fetchedAt": "2026-10-22T05:16:29.905Z"
+    },
+    "2022": {
+      "count": 25073,
+      "complete": true,
+      "through": "2022-12-31",
+      "fetchedAt": "2026-10-22T05:16:58.841Z"
+    },
+    "2023": {
+      "count": 28816,
+      "complete": true,
+      "through": "2023-12-31",
+      "fetchedAt": "2026-10-22T05:17:27.347Z"
+    },
+    "2024": {
+      "count": 39953,
+      "complete": true,
+      "through": "2024-12-31",
+      "fetchedAt": "2026-10-22T05:17:56.276Z"
+    },
+    "2025": {
+      "count": 48151,
+      "complete": true,
+      "through": "2025-12-31",
+      "fetchedAt": "2026-10-22T05:18:24.659Z"
+    }
+  },
+  "_note": "Seed for completed years (NVD CVE API 2.0 totals, fetched by lib/warm-volume.js). Copied to .cache/volume.json on first start; the current year is always fetched live."
+}

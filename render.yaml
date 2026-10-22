@@ -1,0 +1,19 @@
+# Render Blueprint: the PATCH website (static files + cached NVD / CISA KEV feed proxy).
+# Zero dependencies, so there is no build step. Render injects PORT; the server binds 0.0.0.0.
+services:
+  - type: web
+    name: patch-site
+    runtime: node
+    plan: starter
+    rootDir: site
+    buildCommand: "true"
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: SITE_URL
+        value: https://patchproject.xyz
+      - key: NODE_VERSION
+        value: "20"
+      - key: NVD_API_KEY
+        sync: false

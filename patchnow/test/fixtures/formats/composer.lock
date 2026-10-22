@@ -1,0 +1,1 @@
+{"packages":[{"name":"facade/ignition","version":"2.5.1"},{"name":"laravel/framework","version":"v8.0.0"},{"name":"acme/edge","version":"dev-main"}],"packages-dev":[{"name":"phpunit/phpunit","version":"9.5.0"}]}

@@ -1,0 +1,8 @@
+{"name":"app","version":"1.0.0","lockfileVersion":3,"requires":true,"packages":{
+"":{"name":"app","version":"1.0.0","dependencies":{"lodash":"4.17.15"},"devDependencies":{"vite":"6.2.2"}},
+"node_modules/lodash":{"version":"4.17.15"},
+"node_modules/vite":{"version":"6.2.2","dev":true},
+"node_modules/@babel/core":{"version":"7.20.0","dev":true},
+"node_modules/a/node_modules/minimist":{"version":"0.0.10"},
+"packages/local":{"version":"0.0.1"},
+"node_modules/local":{"resolved":"packages/local","link":true}}}

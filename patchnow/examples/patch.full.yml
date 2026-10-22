@@ -1,0 +1,87 @@
+# Every key patchnow v0.1 understands. Secrets are referenced by environment-variable name only.
+version: 1
+armed: true
+
+scan:
+  paths: [".", "services/api"]
+  include_dev: false
+  runtimes: auto
+  epss: true
+  max_depth: 4
+
+packages:
+  only: []
+  exclude: [left-pad]
+
+ignore:
+  - id: CVE-2020-28500
+    reason: "lodash trim functions are never called with user input"
+    expires: 2026-12-31
+    packages: [lodash]
+
+triggers:
+  - kev: true
+  - severity: critical
+    has_fix: true
+  - epss: ">0.5"
+  - cvss: ">=9.0"
+    ecosystems: [npm, PyPI]
+    include_dev: false
+  - runtime: true
+    severity: high
+
+actions:
+  - pin_patch:
+      branch_prefix: patchnow/
+      base: main
+      remote: origin
+      push: true
+      open_pr: true
+      draft: false
+      labels: [security]
+      token_env: GITHUB_TOKEN
+      repo: your-org/your-repo
+      allow_dirty: false
+  - safe_mode:
+      when: { kev: true }
+      provider: render_deploy_hook
+      url_env: RENDER_MAINTENANCE_DEPLOY_HOOK
+  - safe_mode:
+      when: { kev: true, ecosystems: [npm] }
+      provider: vercel_promote
+      token_env: VERCEL_TOKEN
+      project_id: prj_123
+      deployment_id: dpl_known_good
+      team_id: team_123
+  - safe_mode:
+      when: { severity: critical }
+      provider: webhook
+      url_env: FEATURE_FLAG_WEBHOOK
+      secret_env: FEATURE_FLAG_SECRET
+      method: POST
+  - revoke:
+      when: { kev: true }
+      github_tokens_env: [DEPLOY_BOT_PAT]
+      npm_token_ids: []
+      confirm: true
+  - notify:
+      send_in_dry_run: false
+      webhook: { url_env: PATCHNOW_WEBHOOK_URL, secret_env: PATCHNOW_WEBHOOK_SECRET }
+      slack: { url_env: SLACK_WEBHOOK_URL }
+      telegram: { token_env: TELEGRAM_BOT_TOKEN, chat_id: "123456789" }
+      ntfy: { topic: your-oncall-topic, server: https://ntfy.sh, token_env: NTFY_TOKEN }
+      email:
+        host: smtp.example.com
+        port: 587
+        user_env: SMTP_USER
+        pass_env: SMTP_PASS
+        from: "patchnow <alerts@example.com>"
+        to: [oncall@example.com]
+
+state:
+  path: .patchnow/state.json
+  refire_after_days: 0
+audit:
+  path: .patchnow/audit.jsonl
+cache:
+  path: .patchnow/cache

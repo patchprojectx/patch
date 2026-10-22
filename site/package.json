@@ -1,0 +1,13 @@
+{
+  "name": "patch-site",
+  "private": true,
+  "version": "0.1.0",
+  "description": "PATCH website: landing page, docs, live feeds and the in-browser lockfile checker. Zero-dependency server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sync:patchnow": "node ../patchnow/scripts/build-browser.js public/js/patchnow-browser.js",
+    "warm:volume": "node lib/warm-volume.js"
+  },
+  "engines": { "node": ">=18" }
+}

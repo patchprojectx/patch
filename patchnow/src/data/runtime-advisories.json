@@ -1,0 +1,51 @@
+[
+  {
+    "runtime": "node",
+    "title": "Node.js October 21, 2026 security release (10 CVEs, incl. CVE-2026-111497 Brotli decoder RCE, rated High)",
+    "cves": ["CVE-2026-111497", "CVE-2026-105481", "CVE-2026-105482", "CVE-2026-105483", "CVE-2026-106069", "CVE-2026-106070", "CVE-2026-106071", "CVE-2026-106072", "CVE-2026-106073", "CVE-2026-106074"],
+    "severity": "HIGH",
+    "published": "2026-10-21",
+    "lineKey": "major",
+    "fixed": { "26": "26.12.1", "24": "24.22.1", "22": "22.23.4" },
+    "newerThan": "26.999.999",
+    "eolMessage": "End-of-life release line: affected, no fix will be published. Move to 22.x, 24.x or 26.x.",
+    "source": "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases"
+  },
+  {
+    "runtime": "php",
+    "title": "PHP2Shell: unauthenticated RCE in PHP core (CVE-2026-109618, CVE-2026-109619, CVSS 4.0 9.2)",
+    "cves": ["CVE-2026-109618", "CVE-2026-109619"],
+    "severity": "CRITICAL",
+    "published": "2026-10-21",
+    "lineKey": "minor",
+    "fixed": { "8.5": "8.5.12", "8.4": "8.4.27", "8.3": "8.3.36", "8.2": "8.2.35" },
+    "newerThan": "8.5.999",
+    "eolMessage": "Unsupported PHP branch: vulnerable. CISA: take PHP systems offline if they cannot be patched immediately.",
+    "note": "Distribution packages may carry backported fixes under different version strings; check your vendor's advisory.",
+    "source": "https://www.php.net/"
+  },
+  {
+    "runtime": "go",
+    "title": "Go 1.27.3 / 1.26.10: crypto/x509 security fix (distrusts the compromised eMudhra intermediates)",
+    "cves": [],
+    "severity": "HIGH",
+    "published": "2026-10-19",
+    "lineKey": "minor",
+    "fixed": { "1.27": "1.27.3", "1.26": "1.26.10" },
+    "newerThan": "1.27.999",
+    "eolMessage": "Unsupported Go release: no fix on this line. Upgrade to 1.26.10 or 1.27.3.",
+    "source": "https://go.dev/doc/devel/release"
+  },
+  {
+    "runtime": "gitlab",
+    "title": "GitLab CVE-2026-110264: unauthenticated RCE via regex compiler integer overflow (CVSS 3.1 10.0)",
+    "cves": ["CVE-2026-110264"],
+    "severity": "CRITICAL",
+    "published": "2026-10-21",
+    "lineKey": "minor",
+    "fixed": { "19.5": "19.5.1", "19.4": "19.4.3", "19.3": "19.3.6", "19.2": "19.2.9", "19.1": "19.1.9", "19.0": "19.0.10", "18.11": "18.11.13" },
+    "newerThan": "19.5.999",
+    "eolMessage": "Affected (all versions since 7.0) and this line has no fixed release. Upgrade to a supported line.",
+    "source": "https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/"
+  }
+]

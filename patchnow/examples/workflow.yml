@@ -1,0 +1,29 @@
+# .github/workflows/patchnow.yml
+# Runs every 15 minutes and on demand. Opens a pull request when a dependency matches patch.yml.
+name: patchnow
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write          # push the patchnow/* branch
+  pull-requests: write     # open the pull request
+  security-events: write   # upload SARIF to code scanning
+
+concurrency:
+  group: patchnow
+  cancel-in-progress: false
+
+jobs:
+  patchnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: patchprojectx/patch@v0.1   # or pin @v0.1.0 / a commit SHA
+        with:
+          config: patch.yml
+        env:
+          PATCHNOW_WEBHOOK_URL: ${{ secrets.PATCHNOW_WEBHOOK_URL }}
+          # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # RENDER_MAINTENANCE_DEPLOY_HOOK: ${{ secrets.RENDER_MAINTENANCE_DEPLOY_HOOK }}

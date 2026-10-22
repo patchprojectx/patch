@@ -1,0 +1,59 @@
+# patch.yml — patchnow response policy (schema version 1)
+# Docs: README.md · Every action is a dry run until armed: true.
+version: 1
+armed: false
+
+scan:
+  paths: ["."]            # directories searched for lockfiles (depth: max_depth)
+  include_dev: false       # include devDependencies / dev packages
+  runtimes: auto           # auto: detect node, php, go on PATH · off
+  epss: true               # enrich with FIRST EPSS scores when reachable
+  max_depth: 4
+
+# Global package filters (optional). Names match exactly.
+packages:
+  only: []                 # if non-empty, only these packages are considered
+  exclude: []
+
+# Suppress a finding until a date. id may be an OSV id, GHSA id or CVE.
+ignore: []
+#  - id: GHSA-xxxx-xxxx-xxxx
+#    reason: "not reachable: only used in build tooling"
+#    expires: 2026-12-31
+
+# A finding fires if it matches ANY trigger. Keys inside one trigger are ANDed.
+triggers:
+  - kev: true              # listed in the CISA Known Exploited Vulnerabilities catalog
+  - severity: critical     # low | moderate | high | critical (minimum)
+  - epss: ">0.5"           # FIRST EPSS probability of exploitation in the next 30 days
+#  - severity: high
+#    has_fix: true
+#    ecosystems: [npm]
+
+# Executed in order for the findings that fired. "when" narrows an action with trigger syntax.
+actions:
+  - pin_patch:
+      branch_prefix: patchnow/
+      base: main
+      push: true
+      open_pr: true
+  - notify:
+      webhook: { url_env: PATCHNOW_WEBHOOK_URL }
+#      slack: { url_env: SLACK_WEBHOOK_URL }
+#      telegram: { token_env: TELEGRAM_BOT_TOKEN, chat_id: "123456" }
+#      ntfy: { topic: my-oncall-topic, server: https://ntfy.sh }
+#  - safe_mode:
+#      when: { kev: true }
+#      provider: render_deploy_hook     # render_deploy_hook | vercel_promote | webhook
+#      url_env: RENDER_MAINTENANCE_DEPLOY_HOOK
+#  - revoke:
+#      when: { kev: true }
+#      github_tokens_env: [DEPLOY_BOT_PAT]
+#      npm_token_ids: []
+#      confirm: false                   # must also be true for revocation to execute
+
+state:
+  path: .patchnow/state.json   # dedupe: a finding fires once per package@version+advisory
+  refire_after_days: 0         # 0 = never re-fire the same finding
+audit:
+  path: .patchnow/audit.jsonl

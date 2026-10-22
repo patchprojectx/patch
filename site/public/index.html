@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PATCH: exploited-vulnerability response, automated</title>
+<meta name="description" content="PATCH matches OSV.dev, CISA KEV and EPSS against your lockfiles and runtimes, then runs the response you approved in advance: a pinned-version pull request, safe mode, credential revocation and notifications, with an audit log.">
+<meta name="theme-color" content="#0a0c0b">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PATCH: exploited-vulnerability response, automated">
+<meta property="og:description" content="OSV.dev, CISA KEV and EPSS matched against your lockfiles. Pre-approved response: pin, contain, revoke, notify. Open source, v0.1.">
+<!--OG_URL-->
+<meta property="og:image" content="%%SITE_URL%%/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PATCH: exploited-vulnerability response, automated">
+<meta name="twitter:description" content="OSV.dev, CISA KEV and EPSS matched against your lockfiles. Pre-approved response: pin, contain, revoke, notify.">
+<meta name="twitter:image" content="%%SITE_URL%%/og.png">
+<link rel="preload" href="/fonts/plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/plex-mono-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<script src="/js/patchnow-browser.js" defer></script>
+<script src="/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="top">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="PATCH home"><img src="/logo-mark-64.png" width="24" height="24" alt=""><span>PATCH</span></a>
+    <nav aria-label="Sections">
+      <a href="#data">Live data</a><a href="#window">Exposure window</a><a href="#check">Checker</a><a href="#how">How it works</a><a href="#docs">Docs</a><a href="#install">Install</a><a href="https://github.com/patchprojectx/patch" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <span class="nav-meta mono"><span class="dot" id="feedDot"></span><span id="pulse-asof">Connecting to NVD…</span></span>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="eyebrow mono">patchnow v0.1 · MIT · open source</p>
+      <h1>Exploited-vulnerability response, automated.</h1>
+      <p class="lead">Vulnerabilities are disclosed faster than teams can read the advisories, and exploitation now often starts before a fix exists. PATCH matches OSV.dev, CISA KEV and EPSS against the exact versions you run, then executes the response you approved in advance: a pinned-version pull request, safe mode, credential revocation and notifications. Every decision is written to an audit log.</p>
+      <div class="ctas"><a class="btn primary" href="#check">Check a lockfile</a><a class="btn" href="#docs">Read the docs</a></div>
+    </div>
+    <div class="hero-mark" aria-hidden="true"><img src="/mark-512.png" width="512" height="512" alt=""></div>
+  </div>
+</section>
+
+<section class="metrics" id="data" aria-label="Live metrics">
+  <div class="wrap">
+    <div class="m-grid" aria-live="polite">
+      <div class="m m-wide"><div class="m-l">CVEs published · last 24h</div><div class="m-v mono" id="c24">—</div><svg class="spark" id="spark" viewBox="0 0 240 40" preserveAspectRatio="none" role="img" aria-label="CVEs published per hour, last 24 hours"></svg><div class="m-s mono" id="sparkCap">per hour, −24h → now</div></div>
+      <div class="m"><div class="m-l">Rate</div><div class="m-v mono"><span id="cph">—</span><small>/h</small></div><div class="m-s mono">last hour <span id="clh">—</span></div></div>
+      <div class="m"><div class="m-l">30-day average</div><div class="m-v mono"><span id="c30">—</span><small>/day</small></div><div class="m-s mono" id="c30s">NVD</div></div>
+      <div class="m"><div class="m-l">CISA KEV catalog</div><div class="m-v mono" id="kevCount">—</div><div class="m-s mono" id="kevVer">—</div></div>
+      <div class="m"><div class="m-l">Added to KEV · 30 days</div><div class="m-v mono" id="kev30">—</div><div class="m-s mono" id="kevRw">—</div></div>
+      <div class="m"><div class="m-l">Newest CVE</div><div class="m-v m-id mono" id="newest">—</div><div class="m-s mono" id="newestAt">—</div></div>
+    </div>
+    <p class="src mono">Sources: <a href="https://nvd.nist.gov/developers/vulnerabilities" target="_blank" rel="noopener">NVD CVE API 2.0</a>, <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a>. Server-cached, refreshed every 15 minutes.</p>
+  </div>
+</section>
+
+<section class="sec" id="window">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">01</p><h2>The exposure window is closing</h2><p class="sec-lead">More vulnerabilities are published every year, and attackers use them sooner. A response that waits for a human to read an advisory now starts too late.</p></header>
+    <div class="grid-2">
+      <figure class="panel">
+        <figcaption class="panel-h"><span>CVE records published to NVD per year</span><span class="mono dim" id="volMeta">loading…</span></figcaption>
+        <div class="chart" id="volChart" role="img" aria-label="Bar chart of CVE records published per year"></div>
+        <p class="note mono" id="volNote">Rejected records excluded. Current year shown year-to-date with a linear projection.</p>
+      </figure>
+      <figure class="panel">
+        <figcaption class="panel-h"><span>Average time-to-exploit (Mandiant)</span><span class="mono dim">days from patch release to exploitation</span></figcaption>
+        <table class="tbl tte">
+          <thead><tr><th>Period</th><th class="r">TTE</th><th class="bar-c" aria-hidden="true"></th></tr></thead>
+          <tbody>
+            <tr><td>2018–2019</td><td class="r mono">63 days</td><td class="bar-c"><span class="hb w63"></span></td></tr>
+            <tr><td>2020 – early 2021</td><td class="r mono">44 days</td><td class="bar-c"><span class="hb w44"></span></td></tr>
+            <tr><td>2021–2022</td><td class="r mono">32 days</td><td class="bar-c"><span class="hb w32"></span></td></tr>
+            <tr><td>2023</td><td class="r mono">5 days</td><td class="bar-c"><span class="hb w5"></span></td></tr>
+            <tr class="neg"><td>2025 (estimate)</td><td class="r mono">−7 days</td><td class="bar-c"><span class="hb wneg"></span></td></tr>
+          </tbody>
+        </table>
+        <p class="note">A negative value means exploitation began, on average, before a patch was available. Sources: <a href="https://cloud.google.com/blog/topics/threat-intelligence/time-to-exploit-trends-2023" target="_blank" rel="noopener">Mandiant, 2023 Time-to-Exploit Trends</a> (2018–2023); <a href="https://cloud.google.com/blog/topics/threat-intelligence/m-trends-2026" target="_blank" rel="noopener">M-Trends 2026</a> (2025 estimate). The 2023 average excludes 15 statistical outliers; with them it is 47 days.</p>
+      </figure>
+    </div>
+    <div class="callout">
+      <p><strong>What that means for response.</strong> When a fix exists, PATCH opens the pull request that pins it, in minutes rather than at the next triage meeting. When exploitation comes before the fix, patching cannot help, so the pre-approved containment steps do the work: safe mode, credential revocation, paging.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="advisories">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">02</p><h2>Recent advisories</h2><p class="sec-lead">Four ecosystems in one week, October 17–21, 2026. Each entry links to the vendor's advisory.</p></header>
+    <ol class="timeline">
+      <li class="tl crit">
+        <div class="tl-d mono"><time datetime="2026-10-21">Oct 21</time><span class="sev s-crit">Critical</span></div>
+        <div class="tl-b">
+          <h3>PHP2Shell: unauthenticated RCE in PHP core</h3>
+          <p class="ids mono">CVE-2026-109618 · CVE-2026-109619 · CVSS 4.0 9.2</p>
+          <p>Two remote code execution flaws affecting PHP installations that serve web requests (FPM, mod_php, CGI, FrankenPHP, LiteSpeed). CISA advises taking PHP systems offline if they cannot be patched immediately.</p>
+          <dl class="kv mono"><dt>Fixed</dt><dd>8.5.12 · 8.4.27 · 8.3.36 · 8.2.35</dd></dl>
+          <p class="links mono"><a href="https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching" target="_blank" rel="noopener">CISA alert</a><a href="https://www.php.net/" target="_blank" rel="noopener">php.net</a><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-109618" target="_blank" rel="noopener">NVD</a></p>
+        </div>
+      </li>
+      <li class="tl crit">
+        <div class="tl-d mono"><time datetime="2026-10-21">Oct 21</time><span class="sev s-crit">Critical</span></div>
+        <div class="tl-b">
+          <h3>GitLab: unauthenticated RCE via regex compiler integer overflow</h3>
+          <p class="ids mono">CVE-2026-110264 · CVSS 3.1 10.0</p>
+          <p>Affects self-managed GitLab back to 7.0. Fixed releases cover seven release lines, back to 18.11.</p>
+          <dl class="kv mono"><dt>Fixed</dt><dd>19.5.1 · 19.4.3 · 19.3.6 · 19.2.9 · 19.1.9 · 19.0.10 · 18.11.13</dd></dl>
+          <p class="links mono"><a href="https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/" target="_blank" rel="noopener">GitLab release</a><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-110264" target="_blank" rel="noopener">NVD</a></p>
+        </div>
+      </li>
+      <li class="tl high">
+        <div class="tl-d mono"><time datetime="2026-10-21">Oct 21</time><span class="sev s-high">High</span></div>
+        <div class="tl-b">
+          <h3>Node.js security release: 10 CVEs, including a Brotli decoder RCE</h3>
+          <p class="ids mono">CVE-2026-111497 and 9 others</p>
+          <p>An out-of-bounds write in the bundled Brotli decoder affects any process that decodes attacker-controlled Brotli data, including <code>fetch()</code> responses. Vercel deployed WAF rules the same day and notes that only the runtime update covers fetched responses. End-of-life release lines receive no fix.</p>
+          <dl class="kv mono"><dt>Fixed</dt><dd>26.12.1 · 24.22.1 · 22.23.4</dd></dl>
+          <p class="links mono"><a href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">nodejs.org</a><a href="https://vercel.com/kb/bulletin/node-js-security-advisory" target="_blank" rel="noopener">Vercel bulletin</a></p>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl-d mono"><time datetime="2026-10-20">Oct 20</time><span class="sev s-info">Patch update</span></div>
+        <div class="tl-b">
+          <h3>Oracle Critical Patch Update, October 2026</h3>
+          <p>1,295 security patches across Oracle product families.</p>
+          <p class="links mono"><a href="https://www.oracle.com/security-alerts/cpuoct2026.html" target="_blank" rel="noopener">oracle.com</a></p>
+        </div>
+      </li>
+      <li class="tl high">
+        <div class="tl-d mono"><time datetime="2026-10-17">Oct 17–21</time><span class="sev s-high">Trust</span></div>
+        <div class="tl-b">
+          <h3>eMudhra intermediate CA certificates distrusted</h3>
+          <p class="ids mono">8 intermediates · emSign ECC Root CA - G3</p>
+          <p>Eight intermediate CA keys were generated with insufficient randomness. Chrome, Firefox, Apple and Microsoft blocked them; Chrome is removing the root. Go released 1.27.3 and 1.26.10 on October 19 with a crypto/x509 security fix.</p>
+          <dl class="kv mono"><dt>Update</dt><dd>browsers · Go toolchain · anything with an embedded CA store</dd></dl>
+          <p class="links mono"><a href="https://blog.google/security/protecting-chrome-and-android-users-from-compromised-emudhra-intermediate-ca-certificates/" target="_blank" rel="noopener">Google</a><a href="https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/" target="_blank" rel="noopener">Mozilla</a><a href="https://go.dev/doc/devel/release" target="_blank" rel="noopener">go.dev</a></p>
+        </div>
+      </li>
+    </ol>
+    <p class="note mono" id="advKev">As of KEV catalog 2026.10.21, none of these CVEs is listed as known exploited. The live tables below update automatically.</p>
+  </div>
+</section>
+
+<section class="sec" id="exploited">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">03</p><h2>Known exploited and critical, live</h2><p class="sec-lead">By default PATCH acts on two signals: evidence of exploitation in the wild (CISA KEV) and critical severity in a version you actually run. These are the current feeds.</p></header>
+    <div class="panel">
+      <div class="panel-h"><span>CISA KEV · latest additions</span><span class="mono dim" id="kevMeta">loading…</span></div>
+      <div class="tbl-wrap"><table class="tbl data" id="kevTbl">
+        <thead><tr><th>Added</th><th>CVE</th><th>Vendor · product</th><th>Vulnerability</th><th>Due</th><th>Ransomware</th></tr></thead>
+        <tbody id="kevList"><tr><td colspan="6" class="dim">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span>NVD · critical CVEs, last 7 days</span><span class="mono dim" id="critMeta">loading…</span></div>
+      <div class="tbl-wrap"><table class="tbl data" id="critTbl">
+        <thead><tr><th>Published</th><th>CVE</th><th class="r">CVSS</th><th>KEV</th><th>Summary</th></tr></thead>
+        <tbody id="critList"><tr><td colspan="5" class="dim">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="check">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">04</p><h2>Check a lockfile</h2><p class="sec-lead">This uses the same parser and matcher as the CLI, running in your browser. The file is parsed in this tab; only <code>name</code> and <code>version</code> pairs are sent to <a href="https://osv.dev" target="_blank" rel="noopener">api.osv.dev</a>. Results are cross-checked against CISA KEV.</p></header>
+    <div class="checker">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose or drop a lockfile">
+        <input type="file" id="file" accept=".json,.lock,.txt,.mod" hidden>
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <p><strong>Drop a file</strong> or click to choose</p>
+        <p class="mono dim small">package-lock.json · package.json · yarn.lock (v1) · composer.lock · requirements.txt · poetry.lock · go.mod · Cargo.lock</p>
+      </div>
+      <div class="paste">
+        <div class="paste-bar">
+          <label for="pasteKind" class="mono small">Format</label>
+          <select id="pasteKind" class="mono">
+            <option value="auto">Auto-detect</option>
+            <option>package-lock.json</option><option>package.json</option><option>yarn.lock</option><option>composer.lock</option>
+            <option>requirements.txt</option><option>poetry.lock</option><option>go.mod</option><option>Cargo.lock</option>
+          </select>
+          <button class="linkbtn mono small" id="sample" type="button">Load a known-vulnerable sample</button>
+        </div>
+        <textarea id="paste" class="mono" spellcheck="false" placeholder="Paste lockfile contents"></textarea>
+        <div class="paste-go"><span class="mono dim small">Nothing is stored or logged.</span><button class="btn primary sm" id="scan" type="button">Scan</button></div>
+      </div>
+    </div>
+    <div class="results panel" id="results" hidden>
+      <div class="r-status" id="rStatus" role="status"></div>
+      <div class="r-stats" id="rStats"></div>
+      <div class="tbl-wrap"><table class="tbl data pkgs" id="rTable" hidden>
+        <thead><tr><th>Severity</th><th>Package</th><th>Version</th><th class="r">Advisories</th><th class="r">KEV</th><th>Upgrade to</th><th aria-label="Expand"></th></tr></thead>
+        <tbody id="rList"></tbody>
+      </table></div>
+      <p class="note mono" id="rNote"></p>
+    </div>
+
+    <div class="panel runtime" id="runtime">
+      <div class="panel-h"><span>Runtime check</span><span class="mono dim" id="rtMeta">Fixed versions from the advisories above</span></div>
+      <p class="small">A lockfile does not record your runtime. Enter the output of <code>node -v</code>, <code>php -v</code>, <code>go version</code> or the GitLab admin page. The CLI detects node, php and go automatically.</p>
+      <div class="rt-grid">
+        <label class="rt"><span class="mono">node</span><input id="rtNode" class="mono" inputmode="decimal" placeholder="22.11.0" autocomplete="off"><output id="rtNodeOut"></output></label>
+        <label class="rt"><span class="mono">php</span><input id="rtPhp" class="mono" inputmode="decimal" placeholder="8.3.14" autocomplete="off"><output id="rtPhpOut"></output></label>
+        <label class="rt"><span class="mono">go</span><input id="rtGo" class="mono" inputmode="decimal" placeholder="1.26.4" autocomplete="off"><output id="rtGoOut"></output></label>
+        <label class="rt"><span class="mono">gitlab</span><input id="rtGl" class="mono" inputmode="decimal" placeholder="19.4.1" autocomplete="off"><output id="rtGlOut"></output></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">05</p><h2>How it works</h2><p class="sec-lead">A single CLI, <code>patchnow</code>, runs on a schedule in CI or as a daemon. Policy lives in your repository as <code>patch.yml</code>. Nothing destructive happens until you set <code>armed: true</code>.</p></header>
+    <figure class="panel arch">
+      <svg viewBox="0 0 1100 300" role="img" aria-labelledby="archT archD" class="arch-svg">
+        <title id="archT">PATCH architecture</title>
+        <desc id="archD">OSV.dev, CISA KEV and NVD/EPSS feed a matcher that reads lockfiles and runtimes. Findings go through the patch.yml policy, which triggers actions (pull request, safe mode, revoke, notify). Every step is written to an audit log.</desc>
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="a-head"/></marker></defs>
+        <g class="col"><text x="20" y="28" class="a-cap">SOURCES</text>
+          <rect x="20" y="44" width="180" height="52" class="a-box"/><text x="36" y="67" class="a-t">OSV.dev</text><text x="36" y="86" class="a-s">advisories, fixed ranges</text>
+          <rect x="20" y="112" width="180" height="52" class="a-box a-red"/><text x="36" y="135" class="a-t">CISA KEV</text><text x="36" y="154" class="a-s">known exploited</text>
+          <rect x="20" y="180" width="180" height="52" class="a-box"/><text x="36" y="203" class="a-t">FIRST EPSS</text><text x="36" y="222" class="a-s">exploit probability</text></g>
+        <g class="col"><text x="250" y="28" class="a-cap">MATCHER</text>
+          <rect x="250" y="44" width="200" height="188" class="a-box"/><text x="266" y="67" class="a-t">patchnow scan</text>
+          <text x="266" y="94" class="a-s">npm · pnpm · yarn</text><text x="266" y="114" class="a-s">composer · pip · poetry</text><text x="266" y="134" class="a-s">go.mod · Cargo.lock</text><text x="266" y="162" class="a-s">runtimes: node · php · go</text><text x="266" y="196" class="a-s">→ findings: severity,</text><text x="266" y="214" class="a-s">  fixed-in, KEV, EPSS</text></g>
+        <g class="col"><text x="500" y="28" class="a-cap">POLICY</text>
+          <rect x="500" y="44" width="180" height="188" class="a-box a-acc"/><text x="516" y="67" class="a-t">patch.yml</text>
+          <text x="516" y="94" class="a-s">triggers</text><text x="516" y="114" class="a-s">ignore + expiry</text><text x="516" y="134" class="a-s">allow / exclude</text><text x="516" y="154" class="a-s">dedupe state</text><text x="516" y="196" class="a-s">armed: false</text><text x="516" y="214" class="a-s">→ dry run</text></g>
+        <g class="col"><text x="730" y="28" class="a-cap">ACTIONS</text>
+          <rect x="730" y="44" width="170" height="40" class="a-box"/><text x="746" y="69" class="a-t">pin_patch → PR</text>
+          <rect x="730" y="94" width="170" height="40" class="a-box"/><text x="746" y="119" class="a-t">safe_mode</text>
+          <rect x="730" y="144" width="170" height="40" class="a-box"/><text x="746" y="169" class="a-t">revoke</text>
+          <rect x="730" y="194" width="170" height="40" class="a-box"/><text x="746" y="219" class="a-t">notify</text></g>
+        <g class="col"><text x="950" y="28" class="a-cap">RECORD</text>
+          <rect x="950" y="44" width="130" height="188" class="a-box"/><text x="966" y="67" class="a-t">audit.jsonl</text><text x="966" y="94" class="a-s">every decision</text><text x="966" y="114" class="a-s">every action</text><text x="966" y="134" class="a-s">append-only</text><text x="966" y="196" class="a-s">SARIF →</text><text x="966" y="214" class="a-s">code scanning</text></g>
+        <g class="a-lines">
+          <path d="M200 70H250" marker-end="url(#arr)"/><path d="M200 138H250" marker-end="url(#arr)"/><path d="M200 206H250" marker-end="url(#arr)"/>
+          <path d="M450 138H500" marker-end="url(#arr)"/>
+          <path d="M680 138H705V64H730" marker-end="url(#arr)"/><path d="M705 114H730" marker-end="url(#arr)"/><path d="M705 138V164H730" marker-end="url(#arr)"/><path d="M705 164V214H730" marker-end="url(#arr)"/>
+          <path d="M900 138H950" marker-end="url(#arr)"/>
+        </g>
+        <text x="20" y="282" class="a-s">Runs locally or in GitHub Actions. Sends package names + versions to OSV, CVE IDs to EPSS. No source code leaves your machine.</text>
+      </svg>
+    </figure>
+    <div class="steps">
+      <div class="step"><p class="mono idx">1 · Match</p><p>Lockfiles are parsed for exact versions and queried in batches against OSV.dev. Each finding carries its advisory severity, the smallest fixed version, its KEV status and its EPSS score.</p></div>
+      <div class="step"><p class="mono idx">2 · Decide</p><p>Triggers in <code>patch.yml</code> are evaluated: any entry can fire, and every key within an entry must match. Ignores need a reason and can expire. Findings that already fired are deduplicated.</p></div>
+      <div class="step"><p class="mono idx">3 · Act</p><p>Actions run in order: a pinned-version pull request, safe mode on Render, Vercel or a webhook, credential revocation, then notifications that include the PR link.</p></div>
+      <div class="step"><p class="mono idx">4 · Record</p><p>Every run, decision and action is appended to <code>.patchnow/audit.jsonl</code>. SARIF output feeds GitHub code scanning.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="wrap docs">
+    <header class="sec-h"><p class="idx mono">06</p><h2>Documentation</h2><p class="sec-lead">Reference for v0.1. Everything below matches the code in the release tarball.</p></header>
+    <div class="docs-grid">
+      <nav class="toc mono" aria-label="Documentation">
+        <a href="#d-quick">Quick start</a><a href="#d-cli">CLI</a><a href="#d-config">patch.yml</a><a href="#d-actions">Actions</a><a href="#d-gha">GitHub Action</a><a href="#d-formats">Supported files</a><a href="#d-security">Security model</a><a href="#d-limits">Limitations</a>
+      </nav>
+      <div class="doc">
+        <h3 id="d-quick">Quick start</h3>
+<pre class="code"><code><span class="p">$</span> npm install -g https://github.com/patchprojectx/patch/releases/download/v0.1.0/patchnow-0.1.0.tgz
+<span class="p">$</span> patchnow init            <span class="c"># writes patch.yml (dry run until armed: true), adds .patchnow/ to .gitignore</span>
+<span class="p">$</span> patchnow scan --fail-on kev
+<span class="p">$</span> patchnow run             <span class="c"># scan → policy → actions (dry run)</span></code></pre>
+        <p>Requires Node.js 20 or newer. The only runtime dependency is <code>yaml</code>.</p>
+
+        <h3 id="d-cli">CLI</h3>
+        <div class="tbl-wrap"><table class="tbl ref">
+          <thead><tr><th>Command</th><th>Flags</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">init</td><td class="mono"><span class="nw">--dir &lt;path&gt;</span> · <span class="nw">--force</span></td><td>Write a commented <code>patch.yml</code> and add <code>.patchnow/</code> to <code>.gitignore</code>.</td></tr>
+            <tr><td class="mono">scan</td><td class="mono"><span class="nw">--dir</span> · <span class="nw">--format text|json|sarif</span> · <span class="nw">--output &lt;file&gt;</span> · <span class="nw">--include-dev</span> · <span class="nw">--no-runtimes</span> · <span class="nw">--no-epss</span> · <span class="nw">--fail-on kev|critical|high|any|none</span></td><td>Report only; never changes anything. <code>--fail-on</code> makes it a CI gate.</td></tr>
+            <tr><td class="mono">run</td><td class="mono"><span class="nw">--dir</span> · <span class="nw">--config &lt;file&gt;</span> · <span class="nw">--dry-run</span> · <span class="nw">--sarif &lt;file&gt;</span> · <span class="nw">--json</span></td><td>Scan, evaluate policy, execute actions. Dry run unless <code>armed: true</code>; <code>--dry-run</code> forces one. No flag can arm the policy.</td></tr>
+            <tr><td class="mono">watch</td><td class="mono"><span class="nw">--dir</span> · <span class="nw">--config</span> · <span class="nw">--interval 15m</span> · <span class="nw">--dry-run</span></td><td>Repeat <code>run</code> on an interval (minimum 1m).</td></tr>
+            <tr><td class="mono">version · help</td><td></td><td></td></tr>
+          </tbody>
+        </table></div>
+        <p class="mono small dim">Exit codes: 0 ok · 1 <code>--fail-on</code> threshold met · 2 usage or config error · 3 an action failed</p>
+
+        <h3 id="d-config">patch.yml</h3>
+        <p>Unknown keys are rejected, so a typo cannot silently weaken the policy. Secrets are never stored in the file: any key ending in <code>_env</code> names an environment variable.</p>
+        <div class="code-wrap"><button class="copy mono small" id="copyYaml" type="button">Copy</button>
+<pre class="code" id="yamlSrc"><code><span class="k">version</span>: 1
+<span class="k">armed</span>: false                <span class="c"># nothing destructive happens until true</span>
+
+<span class="k">scan</span>:
+  <span class="k">paths</span>: [<span class="s">"."</span>]
+  <span class="k">include_dev</span>: false
+  <span class="k">runtimes</span>: auto            <span class="c"># auto | off</span>
+  <span class="k">epss</span>: true
+  <span class="k">max_depth</span>: 4
+
+<span class="k">packages</span>: { <span class="k">only</span>: [], <span class="k">exclude</span>: [] }
+
+<span class="k">ignore</span>:
+  - <span class="k">id</span>: CVE-2020-28500       <span class="c"># OSV id, GHSA id or CVE</span>
+    <span class="k">reason</span>: <span class="s">"never called with user input"</span>   <span class="c"># required</span>
+    <span class="k">expires</span>: 2026-12-31      <span class="c"># fires again after this date</span>
+    <span class="k">packages</span>: [lodash]
+
+<span class="k">triggers</span>:                   <span class="c"># ANY entry fires; keys inside an entry are ANDed</span>
+  - <span class="k">kev</span>: true
+  - <span class="k">severity</span>: critical       <span class="c"># minimum: low | moderate | high | critical</span>
+  - <span class="k">epss</span>: <span class="s">">0.5"</span>
+
+<span class="k">actions</span>:                    <span class="c"># run in order on the findings that fired</span>
+  - <span class="k">pin_patch</span>: { <span class="k">base</span>: main }
+  - <span class="k">safe_mode</span>:
+      <span class="k">when</span>: { <span class="k">kev</span>: true }
+      <span class="k">provider</span>: render_deploy_hook
+      <span class="k">url_env</span>: RENDER_MAINTENANCE_DEPLOY_HOOK
+  - <span class="k">notify</span>:
+      <span class="k">slack</span>: { <span class="k">url_env</span>: SLACK_WEBHOOK_URL }
+
+<span class="k">state</span>: { <span class="k">path</span>: .patchnow/state.json, <span class="k">refire_after_days</span>: 0 }
+<span class="k">audit</span>: { <span class="k">path</span>: .patchnow/audit.jsonl }</code></pre></div>
+        <div class="tbl-wrap"><table class="tbl ref">
+          <thead><tr><th>Trigger key</th><th>Type</th><th>Matches when</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">kev</td><td class="mono">bool</td><td>The finding's CVE is in the CISA KEV catalog.</td></tr>
+            <tr><td class="mono">severity</td><td class="mono">low|moderate|high|critical</td><td>Advisory severity is at least this level (<code>medium</code> is an alias for <code>moderate</code>).</td></tr>
+            <tr><td class="mono">cvss</td><td class="mono">"&gt;=9.0"</td><td>The CVSS v3 base score satisfies the comparison (<code>&gt; &gt;= &lt; &lt;= ==</code>).</td></tr>
+            <tr><td class="mono">epss</td><td class="mono">"&gt;0.5"</td><td>The highest EPSS probability among the finding's CVEs satisfies the comparison.</td></tr>
+            <tr><td class="mono">ecosystems</td><td class="mono">[npm, PyPI, …]</td><td>The finding's ecosystem is listed (case-insensitive).</td></tr>
+            <tr><td class="mono">packages</td><td class="mono">[name, …]</td><td>The package name is listed.</td></tr>
+            <tr><td class="mono">include_dev</td><td class="mono">bool</td><td><code>false</code> excludes dev dependencies.</td></tr>
+            <tr><td class="mono">runtime</td><td class="mono">bool</td><td>Runtime findings (node, php, go) only, or never.</td></tr>
+            <tr><td class="mono">has_fix</td><td class="mono">bool</td><td>A fixed version is, or is not, published.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small">Any action can carry <code>when:</code> with the same keys to narrow it further. Dedupe key: <code>ecosystem|package|version|advisory</code>. After an armed run acts on a key, that key does not fire again unless <code>refire_after_days</code> is above 0. Dry runs record no state.</p>
+
+        <h3 id="d-actions">Actions</h3>
+        <div class="tbl-wrap"><table class="tbl ref">
+          <thead><tr><th>Action</th><th>Options</th><th>Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">pin_patch</td><td class="mono"><span class="nw">branch_prefix</span> · <span class="nw">base</span> · <span class="nw">remote</span> · <span class="nw">push</span> · <span class="nw">open_pr</span> · <span class="nw">draft</span> · <span class="nw">labels</span> · <span class="nw">token_env</span> · <span class="nw">repo</span> · <span class="nw">allow_dirty</span> · <span class="nw">author_name</span> · <span class="nw">author_email</span></td><td>Raises each package to the smallest version that clears every fired advisory. For npm: <code>npm install pkg@X --package-lock-only --ignore-scripts</code> for direct dependencies, and <code>overrides</code> for transitive ones. Also edits requirements.txt pins and uses pnpm, go, cargo or composer when installed. Verifies by re-parsing the lockfile (npm: also <code>npm ls</code>), then commits on <code>patchnow/&lt;date&gt;-&lt;hash&gt;</code>, pushes, and opens a pull request through the GitHub REST API. Refuses to run on a dirty working tree.</td></tr>
+            <tr><td class="mono">safe_mode</td><td class="mono"><span class="nw">provider</span> · <span class="nw">url_env</span> · <span class="nw">secret_env</span> · <span class="nw">method</span> · <span class="nw">token_env</span> · <span class="nw">project_id</span> · <span class="nw">deployment_id</span> · <span class="nw">team_id</span></td><td><code>render_deploy_hook</code> POSTs a Render deploy hook. <code>vercel_promote</code> calls <code>POST /v10/projects/{id}/promote/{deployment}</code>. <code>webhook</code> sends JSON with an optional HMAC-SHA256 <code>X-Patchnow-Signature</code>.</td></tr>
+            <tr><td class="mono">revoke</td><td class="mono"><span class="nw">github_tokens_env</span> · <span class="nw">npm_token_ids</span> · <span class="nw">confirm</span> · <span class="nw">npm_bin</span></td><td>GitHub tokens go to <code>POST /credentials/revoke</code> (unauthenticated by design). npm tokens are revoked with <code>npm token revoke &lt;id&gt;</code>. Executes only when the policy is armed <em>and</em> <code>confirm: true</code>. Token values are never printed or logged.</td></tr>
+            <tr><td class="mono">notify</td><td class="mono"><span class="nw">webhook</span> · <span class="nw">slack</span> · <span class="nw">telegram</span> · <span class="nw">ntfy</span> · <span class="nw">email</span> · <span class="nw">send_in_dry_run</span></td><td>The message includes the results of earlier actions, such as the PR link. Email uses a built-in SMTP client (implicit TLS or STARTTLS) and will not send credentials without TLS.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3 id="d-gha">GitHub Action</h3>
+        <p><code>patchprojectx/patch</code> is a composite action (<code>action.yml</code> at the repository root). It runs <code>patchnow run --sarif</code>, keeps <code>.patchnow/</code> between runs with <code>actions/cache</code>, and uploads SARIF to code scanning. Pin <code>@v0.1</code> for the latest v0.1.x, or <code>@v0.1.0</code> for an exact release.</p>
+<pre class="code"><code><span class="k">on</span>:
+  <span class="k">schedule</span>: [{ <span class="k">cron</span>: <span class="s">"*/15 * * * *"</span> }]
+  <span class="k">workflow_dispatch</span>:
+<span class="k">permissions</span>: { <span class="k">contents</span>: write, <span class="k">pull-requests</span>: write, <span class="k">security-events</span>: write }
+<span class="k">jobs</span>:
+  <span class="k">patchnow</span>:
+    <span class="k">runs-on</span>: ubuntu-latest
+    <span class="k">steps</span>:
+      - <span class="k">uses</span>: actions/checkout@v4
+      - <span class="k">uses</span>: patchprojectx/patch@v0.1
+        <span class="k">with</span>: { <span class="k">config</span>: patch.yml }
+        <span class="k">env</span>:
+          <span class="k">SLACK_WEBHOOK_URL</span>: ${{ secrets.SLACK_WEBHOOK_URL }}</code></pre>
+        <p class="mono small dim">Inputs: config · working-directory · dry-run · sarif · upload-sarif · github-token · persist-state</p>
+
+        <h3 id="d-formats">Supported files</h3>
+        <div class="tbl-wrap"><table class="tbl ref">
+          <thead><tr><th>File</th><th>Ecosystem</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">package-lock.json v1–3, npm-shrinkwrap.json</td><td>npm</td><td>Exact versions; <code>dev</code> respected.</td></tr>
+            <tr><td class="mono">pnpm-lock.yaml v5, v6, v9</td><td>npm</td><td>CLI only.</td></tr>
+            <tr><td class="mono">yarn.lock</td><td>npm</td><td>Classic v1 and Berry (Berry: CLI only).</td></tr>
+            <tr><td class="mono">package.json</td><td>npm</td><td>Used only without a lockfile. Takes the lowest version each range allows, so results are approximate.</td></tr>
+            <tr><td class="mono">composer.lock</td><td>Packagist</td><td><code>dev-*</code> branches skipped.</td></tr>
+            <tr><td class="mono">requirements.txt · poetry.lock</td><td>PyPI</td><td>requirements.txt: exact <code>==</code> pins only.</td></tr>
+            <tr><td class="mono">go.mod (go.sum fallback)</td><td>Go</td><td>Go toolchain matched live as <code>stdlib</code>.</td></tr>
+            <tr><td class="mono">Cargo.lock</td><td>crates.io</td><td>Registry crates only.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3 id="d-security">Security model: what leaves your machine</h3>
+        <ul class="list">
+          <li><strong>To api.osv.dev:</strong> package names, versions and ecosystems.</li>
+          <li><strong>To api.first.org:</strong> CVE identifiers, for EPSS scores. Disable with <code>scan.epss: false</code> or <code>--no-epss</code>.</li>
+          <li><strong>From cisa.gov:</strong> the public KEV catalog, cached locally for 6 hours.</li>
+          <li><strong>Never sent:</strong> source code, file contents beyond name and version, environment variables. Secrets are referenced only by environment-variable name and redacted from error URLs.</li>
+          <li><strong>Least surprise:</strong> dry run by default. Revocation needs <code>armed: true</code> and <code>confirm: true</code>. Lockfile updates run with <code>--ignore-scripts</code>. PATCH never merges anything; a human reviews the pull request.</li>
+          <li><strong>This website:</strong> the checker sends only name and version pairs to OSV. No cookies, no analytics.</li>
+        </ul>
+
+        <h3 id="d-limits">Limitations (v0.1)</h3>
+        <ul class="list">
+          <li>Coverage is OSV's coverage. Matching is by package and version only; there is no reachability analysis.</li>
+          <li>A <code>package.json</code> without a lockfile, or a <code>go.sum</code>-only project, can over-report. Ranges in <code>requirements.txt</code> are skipped.</li>
+          <li>The minimum fixed version can still be a breaking change. Run your tests on the pull request.</li>
+          <li>The end-to-end test covers the npm update path. The pnpm, Go, Cargo and Composer editors call the native tools but are not covered by it. <code>yarn.lock</code> and <code>poetry.lock</code> are reported for manual update.</li>
+          <li>Pull requests opened with the default <code>GITHUB_TOKEN</code> do not trigger other workflows. Use a GitHub App or a fine-grained PAT if CI must run on them.</li>
+          <li>Node.js and PHP runtime checks use a hand-curated advisory table, not a live feed. Go is matched live through OSV.</li>
+          <li>Windows and SBOM inputs (CycloneDX, SPDX) are not supported yet.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="install">
+  <div class="wrap">
+    <header class="sec-h"><p class="idx mono">07</p><h2>Install</h2><p class="sec-lead"><span class="tag mono">v0.1</span> Not on npm yet. Install from the GitHub release tarball, or use the GitHub Action.</p></header>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-h"><span>Release tarball</span><span class="mono dim">patchnow-0.1.0.tgz</span></div>
+<pre class="code flush"><code><span class="p">$</span> curl -LO https://github.com/patchprojectx/patch/releases/download/v0.1.0/patchnow-0.1.0.tgz
+<span class="p">$</span> sha256sum patchnow-0.1.0.tgz
+<span class="c">  a8afde00161aa86ef34db885d1cf4e3870702332947a7f9ccff960b4bd557ded  patchnow-0.1.0.tgz</span>
+<span class="p">$</span> npm install -g ./patchnow-0.1.0.tgz
+<span class="p">$</span> patchnow init &amp;&amp; patchnow run</code></pre>
+        <p class="panel-f"><a class="btn sm" href="https://github.com/patchprojectx/patch/releases/download/v0.1.0/patchnow-0.1.0.tgz">Download tarball</a><a class="linkbtn mono small" href="https://github.com/patchprojectx/patch/releases/tag/v0.1.0" target="_blank" rel="noopener">Release notes</a></p>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><span>Status</span><span class="mono dim">v0.1</span></div>
+        <dl class="status-list">
+          <div><dt>CLI: scan, run, watch, init</dt><dd class="ok mono">working</dd></div>
+          <div><dt>pin_patch: npm</dt><dd class="ok mono">tested end-to-end</dd></div>
+          <div><dt>pin_patch: requirements.txt</dt><dd class="ok mono">unit-tested</dd></div>
+          <div><dt>pin_patch: pnpm, Go, Cargo, Composer</dt><dd class="warn mono">implemented, not end-to-end tested</dd></div>
+          <div><dt>safe_mode, revoke, notify</dt><dd class="ok mono">tested against local mock servers</dd></div>
+          <div><dt>GitHub Action</dt><dd class="warn mono">included, not yet run on GitHub</dd></div>
+          <div><dt>npm registry</dt><dd class="dim mono">not published yet</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span class="brand"><img src="/logo-mark-64.png" width="18" height="18" alt=""><span>PATCH</span></span>
+    <p class="small dim">Data: <a href="https://nvd.nist.gov/developers/vulnerabilities" target="_blank" rel="noopener">NVD CVE API 2.0</a> · <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a> · <a href="https://osv.dev" target="_blank" rel="noopener">OSV.dev</a> · <a href="https://www.first.org/epss/" target="_blank" rel="noopener">FIRST EPSS</a>. This product uses data from the NVD API but is not endorsed or certified by the NVD. <a href="https://github.com/patchprojectx/patch" target="_blank" rel="noopener">Source on GitHub</a> · MIT licensed. No cookies, no analytics.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# pinned
+Django==3.2.0
+requests[security] == 2.25.0  # comment
+PyYAML===5.3
+flask>=2.0
+-r other.txt
+urllib3==1.26.4 \
+    --hash=sha256:abc

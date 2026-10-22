@@ -1,0 +1,48 @@
+{
+  "name": "patchnow",
+  "version": "0.1.0",
+  "description": "Exploited-vulnerability response, automated. Scans lockfiles and runtimes against OSV.dev, CISA KEV and EPSS, evaluates a patch.yml policy, and runs pre-approved actions (pin PR, safe mode, revoke, notify) with an audit log.",
+  "license": "MIT",
+  "homepage": "https://patchproject.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patchprojectx/patch.git",
+    "directory": "patchnow"
+  },
+  "bugs": {
+    "url": "https://github.com/patchprojectx/patch/issues"
+  },
+  "bin": {
+    "patchnow": "bin/patchnow.js"
+  },
+  "main": "src/index.js",
+  "files": [
+    "bin",
+    "src",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/",
+    "test:unit": "node --test test/parsers.test.js test/core.test.js test/policy.test.js test/actions.test.js",
+    "test:e2e": "node --test test/e2e.test.js",
+    "build:browser": "node scripts/build-browser.js",
+    "pretest": "node scripts/build-browser.js"
+  },
+  "dependencies": {
+    "yaml": "^2.5.0"
+  },
+  "keywords": [
+    "security",
+    "cve",
+    "kev",
+    "osv",
+    "sca",
+    "incident-response",
+    "dependencies"
+  ]
+}

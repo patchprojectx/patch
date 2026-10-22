@@ -1,0 +1,67 @@
+name: ci
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  patchnow:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    defaults:
+      run:
+        working-directory: patchnow
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Browser bundle is in sync with patchnow
+        run: |
+          node patchnow/scripts/build-browser.js /tmp/patchnow-browser.js
+          cmp /tmp/patchnow-browser.js site/public/js/patchnow-browser.js
+      - name: Site boots and serves
+        working-directory: site
+        run: |
+          PORT=4970 node server.js > /tmp/site.log 2>&1 &
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:4970/healthz && break; sleep 1; done
+          curl -fsS http://127.0.0.1:4970/ | grep -q 'Exploited-vulnerability response, automated.'
+          curl -fsS http://127.0.0.1:4970/api/volume | grep -q '"year":2025'
+          curl -fsS -o /dev/null http://127.0.0.1:4970/js/patchnow-browser.js
+          cat /tmp/site.log
+  action:
+    # Runs this repository's own action.yml (as `uses: patchprojectx/patch@v0.1` would) in dry-run mode
+    # against the site's sample lockfile. Nothing is pushed, opened or uploaded.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare a sample project
+        run: |
+          mkdir smoke
+          cp site/public/sample-package-lock.json smoke/package-lock.json
+          node patchnow/bin/patchnow.js init --dir smoke
+      - id: patchnow
+        uses: ./
+        with:
+          working-directory: smoke
+          dry-run: "true"
+          upload-sarif: "false"
+          persist-state: "false"
+      - name: Check the SARIF report
+        env:
+          SARIF: ${{ steps.patchnow.outputs.sarif }}
+        run: |
+          test -s "$SARIF"
+          node -e 'const s=JSON.parse(require("fs").readFileSync(process.env.SARIF,"utf8")); const n=s.runs[0].results.length; console.log(n+" SARIF results"); if(!n) process.exit(1)'

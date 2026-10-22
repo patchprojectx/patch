@@ -1,0 +1,8 @@
+lockfileVersion: 5.4
+packages:
+  /minimist/1.2.5:
+    resolution: {integrity: sha512-c}
+    dev: false
+  /@scope/pkg/2.1.0_react@18.2.0:
+    resolution: {integrity: sha512-d}
+    dev: true

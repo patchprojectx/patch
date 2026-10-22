@@ -1,0 +1,32 @@
+# dependencies / build output
+node_modules/
+patchnow/dist/
+*.tgz
+
+# runtime state, caches, audit logs
+.cache/
+.patchnow/
+*.jsonl
+state.json
+
+# secrets
+.env
+.env.*
+*.pem
+*.key
+.npmrc
+hosts.yml
+
+# test temp dirs and reports
+tmp/
+.tmp/
+patchnow-e2e-*/
+patchnow-live-*/
+*.sarif
+coverage/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
