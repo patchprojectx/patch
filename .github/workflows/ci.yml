@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [20, 22]
+        node: [20, 22, 24]
     defaults:
       run:
         working-directory: patchnow
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci --no-audit --no-fund
@@ -24,8 +24,8 @@ jobs:
   site:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
       - name: Browser bundle is in sync with patchnow
@@ -46,9 +46,10 @@ jobs:
     # against the site's sample lockfile. Nothing is pushed, opened or uploaded.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Prepare a sample project
         run: |
+          (cd patchnow && npm ci --omit=dev --no-audit --no-fund --ignore-scripts)
           mkdir smoke
           cp site/public/sample-package-lock.json smoke/package-lock.json
           node patchnow/bin/patchnow.js init --dir smoke

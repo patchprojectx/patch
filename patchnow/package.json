@@ -27,7 +27,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "test:unit": "node --test test/parsers.test.js test/core.test.js test/policy.test.js test/actions.test.js",
     "test:e2e": "node --test test/e2e.test.js",
     "build:browser": "node scripts/build-browser.js",

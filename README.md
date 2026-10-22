@@ -44,7 +44,7 @@ jobs:
   patchnow:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: patchprojectx/patch@v0.1
         with: { config: patch.yml }
 ```

@@ -364,7 +364,7 @@
   <span class="k">patchnow</span>:
     <span class="k">runs-on</span>: ubuntu-latest
     <span class="k">steps</span>:
-      - <span class="k">uses</span>: actions/checkout@v4
+      - <span class="k">uses</span>: actions/checkout@v5
       - <span class="k">uses</span>: patchprojectx/patch@v0.1
         <span class="k">with</span>: { <span class="k">config</span>: patch.yml }
         <span class="k">env</span>:

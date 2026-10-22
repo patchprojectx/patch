@@ -33,9 +33,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
-        node-version: 20
+        node-version: 24
     - name: Install patchnow
       shell: bash
       working-directory: ${{ github.action_path }}/patchnow
