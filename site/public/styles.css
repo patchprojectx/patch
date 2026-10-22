@@ -36,6 +36,12 @@ p{margin:0 0 12px}
 .nav nav{display:flex;gap:24px;font-size:13.5px}
 .nav nav a{color:var(--tx-2)}.nav nav a:hover{color:var(--tx);text-decoration:none}
 .nav-meta{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx-3);white-space:nowrap}
+.ca-chip{display:inline-flex;align-items:center;gap:7px;height:22px;padding:0 8px;margin-left:-18px;border:1px solid var(--line-2);font-size:10.5px;letter-spacing:.08em;color:var(--tx-2);white-space:nowrap;flex:none}
+.ca-dot{width:6px;height:6px;background:var(--amber);flex:none}
+.nav-x{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx-2);white-space:nowrap;flex:none}
+.nav-x:hover{color:var(--tx);text-decoration:none}
+.nav-x svg,.foot-x svg{display:block;flex:none}
+.foot-x{display:inline-flex;align-items:center;gap:5px;vertical-align:-1px}
 .dot{width:6px;height:6px;background:var(--tx-3);display:inline-block}
 .dot.live{background:var(--acc)}.dot.err{background:var(--red)}
 
@@ -283,6 +289,9 @@ textarea:focus{outline:none;box-shadow:inset 0 0 0 1px var(--acc)}
   .steps{grid-template-columns:1fr}.step{border-bottom:1px solid var(--line)}
   .foot-in{flex-direction:column;gap:16px}
   .nav-meta{display:none}
+  .nav-in{gap:24px}
+  .ca-chip{margin-left:-12px}
+  .nav-x{margin-left:auto}
   .adv-list{grid-template-columns:auto minmax(0,1fr);padding-left:20px}
   .adv-list .sum{grid-column:1/-1}
   .adv-list .fx{text-align:left}
@@ -292,4 +301,7 @@ textarea:focus{outline:none;box-shadow:inset 0 0 0 1px var(--acc)}
   .pkgs tr.pkg td:nth-child(2){white-space:normal;word-break:break-word}
   .pkgs th:nth-child(7),.pkgs tr.pkg td:nth-child(7){display:none}
   .tbl th,.tbl td{padding-left:12px;padding-right:12px}
+}
+@media (max-width:360px){
+  .nav-x span{display:none}
 }
